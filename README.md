@@ -1,6 +1,6 @@
 # LetterFeed
 
-Slow-paced TensorFlow tutorial (find it [here](https://www.tensorflow.org/versions/r0.9/tutorials/mnist/beginners/index.html)).<br>
+Slow-paced TensorFlow([overview](https://www.tensorflow.org/versions/r0.10/get_started/basic_usage.html#overview)) tutorial (find it [here](https://www.tensorflow.org/versions/r0.9/tutorials/mnist/beginners/index.html)).<br>
 What's in this repo:
 
 - Python (more specifically, numpy and TensorFlow)
