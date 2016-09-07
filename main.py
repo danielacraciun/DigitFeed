@@ -25,10 +25,26 @@ x = tf.placeholder(tf.float32, [None, 784])
 
 # W is the weight and b is the bias.
 # For machine learning, the model parameters are usually variables.
-# They are odifiable tensors full of zeros
+# They are modifiable tensors full of zeros.
 # W has a shape of [784, 10] because we want to multiply
 # the 784-dimensional image vectors by it to produce
 # 10-dimensional vectors of evidence for the difference classes.
 # b has a shape of [10] so we can add it to the output.
 W = tf.Variable(tf.zeros([784, 10]))
 b = tf.Variable(tf.zeros([10]))
+
+# x is multiplied by W, then b is added
+y = tf.nn.softmax(tf.matmul(x, W) + b)
+
+# Implementing cross entropy
+
+# While y is our predicted probabilty distribution,
+# y_ is the true distribution (one-hot vector above)
+y_ = tf.placeholder(tf.float32, [None, 10])
+
+# The logarithm of each element of y is computed, then multiplied with y_.
+# Resulting elements are added in the second dimension of y, due
+# to the reduction_indices parameter (if 0 was used, they would be added
+# in the first). The means is computed over all the examples in the batch
+cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y),
+                                              reduction_indices=[1]))
