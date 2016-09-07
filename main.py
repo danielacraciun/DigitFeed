@@ -36,7 +36,7 @@ b = tf.Variable(tf.zeros([10]))
 # x is multiplied by W, then b is added
 y = tf.nn.softmax(tf.matmul(x, W) + b)
 
-# Implementing cross entropy
+# Implementing cross entropy (the cost function)
 
 # While y is our predicted probabilty distribution,
 # y_ is the true distribution (one-hot vector above)
@@ -45,6 +45,25 @@ y_ = tf.placeholder(tf.float32, [None, 10])
 # The logarithm of each element of y is computed, then multiplied with y_.
 # Resulting elements are added in the second dimension of y, due
 # to the reduction_indices parameter (if 0 was used, they would be added
-# in the first). The means is computed over all the examples in the batch
+# in the first). The means is computed over all the examples in the batch.
 cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y),
                                               reduction_indices=[1]))
+# Learning rate
+lr = 0.5
+
+# At each step, tensorflow minimizes cross entropy using the gradient descent
+# algorithm with the given learning rate
+train_step = tf.train.GradientDescentOptimizer(lr).minimize(cross_entropy)
+
+# The model is set up, it needs to be initalized
+init = tf.initialize_all_variables()
+
+# The model needs to be launched in a session
+sess = tf.Session()
+sess.run(init)
+
+# Training for n epochs
+n = 1000
+for i in range(1000):
+    batch_xs, batch_ys = mnist.train.next_batch(100)
+    sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
