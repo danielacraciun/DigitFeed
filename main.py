@@ -62,8 +62,24 @@ init = tf.initialize_all_variables()
 sess = tf.Session()
 sess.run(init)
 
-# Training for n epochs
+# Training for n epochs (stochastic - using small batches of data)
 n = 1000
-for i in range(1000):
+for i in range(n):
+    # Random generation of 100 batches of data points from training set
     batch_xs, batch_ys = mnist.train.next_batch(100)
-    sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
+    try:
+        sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
+    except KeyboardInterrupt:
+        # In case people get bored waiting for it to finish
+        print("\nExiting!")
+
+# tf.argmax gives you the index of the highest entry in a tensor along an axis
+guessed_label = tf.argmax(y, 1)
+correct_label = tf.argmax(y_, 1)
+
+# This return a list of booleans
+correct_prediction = tf.equal(guessed_label, correct_label)
+
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+print(sess.run(accuracy, feed_dict={x: mnist.test.images,
+                                    y_: mnist.test.labels}))
